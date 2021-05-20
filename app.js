@@ -1,12 +1,12 @@
 const canv = document.getElementById("gameCanvas")
 const ctx  = canv.getContext("2d")
-const BIRD_RADIUS = 15
+const BIRD_RADIUS = 12
 const PIPE_SPEED = 2
 const PIPE_WIDTH = 30
-const MAX_FALL_SPEED = 5
-const GAP = 100
-const GRAVITY = 0.1
-const JUMP = 15
+const MAX_FALL_SPEED = 10
+const GAP = 120
+const GRAVITY = 0.3
+const JUMP = 5
 let pipes = []
 
 //define classes
@@ -33,9 +33,9 @@ class Bird{
 	}
 	jump(){
 		if(this.y > 0){
-			this.y -= JUMP
+			this.fallSpeed = -JUMP
 		}
-		this.fallSpeed = 0
+		this.y += this.fallSpeed
 	}
 }
 
