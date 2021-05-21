@@ -54,6 +54,12 @@ class Pipe{
 	movePipe(){
 		this.x -= PIPE_SPEED
 	}
+	hits(bird){
+		if((bird.y - bird.r < this.top || bird.y + bird.r > this.bottom) && 
+		   (bird.x + bird.r > this.x && !(bird.x + bird.r > this.x + PIPE_WIDTH))){
+			return true
+		}
+	}
 }
 
 let currTime = 0
@@ -77,23 +83,20 @@ function update(time){
 	ctx.fillStyle = "#333"
 	ctx.fillRect(0, 0, canv.width, canv.height)
 
-	//move the pipes, remove if they go beyond screen
-	for(let i = pipes.length - 1; i >= 0; i--){
-		if(pipes[i].x + PIPE_WIDTH < 0){
-			pipes.splice(i, 1)
-		}else pipes[i].movePipe()
-	}
-
 	//move the bird - gravity, jump
 	if(bird.y <= canv.height - bird.r){
 		bird.fall()
 	}
 
+	//move the pipes, remove if they go beyond screen
 	// check colision between bird and pipes
-	for(let i = 0; i < pipes.length; i++){
-		if(bird.x + bird.r > pipes[i].x && 
-		  (bird.y - bird.r < pipes[i].top || bird.y + bird.r > canv.height - pipes[i].bottom)){
-		  	console.log("hit")
+	for(let i = pipes.length - 1; i >= 0; i--){
+		if(pipes[i].x + PIPE_WIDTH < 0){
+			pipes.splice(i, 1)
+		}else pipes[i].movePipe()
+
+		if(pipes[i].hits(bird)){
+			console.log("hit")
 			pipes[i].color = "red"
 		}
 	}
@@ -108,7 +111,7 @@ function update(time){
 }
 
 //initialize game
-let bird = new Bird(BIRD_RADIUS*2, canv.height/2)
+let bird = new Bird(BIRD_RADIUS*4, canv.height/2)
 pipes.push(new Pipe)
 
 document.addEventListener("keydown", e => {
