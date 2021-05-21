@@ -19,13 +19,13 @@ class Bird{
 		this.y = y;
 		this.r = BIRD_RADIUS;
 		this.fallSpeed = 0
+		this.canJump = true
 	}
 	drawBird(){
 		ctx.fillStyle = "rgb(255, 0, 100)"
 		ctx.beginPath();
 		ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
 		ctx.fill();
-		ctx.fillStyle = "blue"
 	}
 	fall(){
 		if(this.fallSpeed < MAX_FALL_SPEED){
@@ -34,10 +34,17 @@ class Bird{
 		this.y += this.fallSpeed
 	}
 	jump(){
-		if(this.y > 0){
-			this.fallSpeed = -JUMP
-		}
+		this.fallSpeed = -JUMP
 		this.y += this.fallSpeed
+	}
+	checkBounds(){
+		if(this.y < this.r){
+			this.fallSpeed = 0
+			this.y = this.r
+		}else if(this.y + this.r > canv.height){
+			this.fallSpeed = 0
+			this.y = canv.height - this.r
+		}
 	}
 }
 
@@ -72,7 +79,6 @@ class Pipe{
 		if(bird.x - bird.r > this.x + PIPE_WIDTH){
 			return true
 		}
-
 	}
 }
 
@@ -98,12 +104,11 @@ function update(time){
 	ctx.fillRect(0, 0, canv.width, canv.height)
 
 	//move the bird - gravity, jump
-	if(bird.y + bird.r < canv.height){
-		bird.fall()
-	}else bird.y = canv.height - bird.r
+	bird.fall()
+	bird.checkBounds() //make sure bird within bounds
 
 	//move the pipes, remove if they go beyond screen
-	// check colision between bird and pipes
+	//check colision between bird and pipes
 	for(let i = pipes.length - 1; i >= 0; i--){
 		if(pipes[i].x + PIPE_WIDTH < 0){
 			pipes.splice(i, 1)
@@ -112,9 +117,8 @@ function update(time){
 		if(pipes[i].hits(bird)){
 			console.log("hit")
 			pipes[i].color = "red"
-		} else pipes[i].color = "white"
+		}else pipes[i].color = "white"
 	}
-
 
 	//draw the pipes, bird
 	bird.drawBird()
@@ -128,10 +132,15 @@ function update(time){
 //initialize game
 let bird = new Bird(BIRD_RADIUS*4, canv.height/2)
 pipes.push(new Pipe)
-
 document.addEventListener("keydown", e => {
-	if(e.keyCode == 32){
+	if(e.keyCode == 32 && bird.canJump){
 		bird.jump()
+		bird.canJump = false
+	}
+})
+document.addEventListener("keyup", e => {
+	if(e.keyCode == 32){
+		bird.canJump = true
 	}
 })
 
