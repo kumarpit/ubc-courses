@@ -7,6 +7,7 @@ const MAX_FALL_SPEED = 10
 const GAP = 120
 const GRAVITY = 0.3
 const JUMP = 5
+const MIN_TOP_HEIGHT = 10
 let pipes = []
 
 //define classes
@@ -41,7 +42,7 @@ class Bird{
 
 class Pipe{
 	constructor(){
-		this.top = Math.random() * canv.height / 2;
+		this.top = Math.random() * canv.height / 2 + MIN_TOP_HEIGHT;
 		this.bottom = this.top + GAP
 		this.x = canv.width + PIPE_WIDTH
 		this.color = "white"
@@ -62,7 +63,7 @@ class Pipe{
 	}
 }
 
-let currTime = 0
+let lastTime = 0
 let deltaTime = 0
 let spawnInterval = 2000
 let spawnCounter = 0
@@ -70,8 +71,8 @@ let spawnCounter = 0
 //main game loop
 function update(time){
 	if(time){
-		deltaTime = time - currTime
-		currTime = time
+		deltaTime = time - lastTime
+		lastTime = time
 		spawnCounter += deltaTime
 
 		if(spawnCounter > spawnInterval){
