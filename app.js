@@ -56,7 +56,7 @@ class Pipe{
 	}
 	hits(bird){
 		if((bird.y - bird.r < this.top || bird.y + bird.r > this.bottom) && 
-		   (bird.x + bird.r > this.x && !(bird.x + bird.r > this.x + PIPE_WIDTH))){
+		   (bird.x + bird.r > this.x && !(bird.x - bird.r > this.x + PIPE_WIDTH))){
 			return true
 		}
 	}
@@ -98,7 +98,7 @@ function update(time){
 		if(pipes[i].hits(bird)){
 			console.log("hit")
 			pipes[i].color = "red"
-		}
+		} else pipes[i].color = "white"
 	}
 
 	//draw the pipes, bird
