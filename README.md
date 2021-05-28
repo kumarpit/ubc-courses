@@ -1,2 +1,2 @@
-# Flappy-Bird-Neural-Network
-AI that plays Flappy Bird
+# seats available
+Python script that scrapes university website for remaining seats of searched courses.
