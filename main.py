@@ -16,4 +16,4 @@ html_soup = BeautifulSoup(page_html, "html.parser")
 seats = html_soup.find_all("strong") 
 
 for seat in seats:
-	print(seat)
+	print(seat.text)
