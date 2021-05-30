@@ -1,26 +1,15 @@
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-import os 
-import wget
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
 
-driver = webdriver.Chrome("C:/Users/Lenovo/Downloads/chromedriver_win32/chromedriver.exe")
-driver.get("https://cas.id.ubc.ca/ubc-cas/login?TARGET=https%3A%2F%2Fssc.adm.ubc.ca%2Fsscportal%2Fservlets%2FSRVSSCFramework")
+get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept=CPSC&course=210&section=921"
 
-# select input fields and wait for web page to fully load
-username = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[name='username']")))
-password = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[name='password']")))
+request_page = urlopen(get_url)
+page_html = request_page.read()
+request_page.close()
 
-# clear input fields
-username.clear()
-password.clear()
+html_soup = BeautifulSoup(page_html, "html.parser")
 
-# send username, password, click login
-username.send_keys(os.environ.get("USER"))
-password.send_keys(os.environ.get("PASS"))
+seats = html_soup.find_all("strong") 
 
-# click login
-login = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type='submit']"))).click()
-
+for seat in seats:
+	print(seat)
