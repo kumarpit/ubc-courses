@@ -11,7 +11,6 @@ def getCourses(dept):
 	request_page = urlopen(get_url)
 	page_html = request_page.read()
 	request_page.close()
-
 	html_soup = BeautifulSoup(page_html, "html.parser")
 
 	table = html_soup.find("table", id="mainTable")
@@ -28,7 +27,6 @@ def getSections(dept, course):
 	request_page = urlopen(get_url)
 	page_html = request_page.read()
 	request_page.close()
-
 	html_soup = BeautifulSoup(page_html, "html.parser")
 
 	table = html_soup.find("table", class_="section-summary")
@@ -48,10 +46,7 @@ def getSeats(dept, course, section):
 	request_page = urlopen(get_url)
 	page_html = request_page.read()
 	request_page.close()
-
 	html_soup = BeautifulSoup(page_html, "html.parser")
-
-	# tables = html_soup.find_all("table", class_="table")
 
 	strong_el = html_soup.find_all("strong")
 	for el in strong_el:
