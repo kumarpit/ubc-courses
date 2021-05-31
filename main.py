@@ -71,7 +71,6 @@ def getCurrTerm():
 		print(bt.text)
 
 def start():
-	getCurrTerm()
 	dept = input("Dept: ")
 	
 	if(dept == "-1"):
@@ -88,5 +87,6 @@ def start():
 		getSections(dept, course)
 	else:
 		getSeats(dept, course, section)
-
+		
+getCurrTerm()
 start()
