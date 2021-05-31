@@ -1,4 +1,2 @@
 # seats available
-Script that scrapes university website for remaining seats of searched courses.
-
-Note: work in progress...
+Script that scrapes university website for remaining seats and add/drop date of searched courses. 
