@@ -12,11 +12,11 @@ request_page.close()
 
 html_soup = BeautifulSoup(page_html, "html.parser")
 
-sections = html_soup.find_all('td', class_=None) 
+table = html_soup.find("table", class_="section-summary")
 
-for section in sections:
-	print(section.text)
+for to_delete in table.find_all("td", class_="section-comments"):
+	to_delete.decompose()
 
-# SEARCH FOR COURSE -> RETURNS ALL SECTIONS
-# SEARCH FOR SECTIONS -> RETURNS AVAILABLE SEATS, TIMING, LINK TO REGISTER
+for td in table.find_all("tr"):
+	print(td.text)
 
