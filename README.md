@@ -4,5 +4,5 @@ Command line tool that enables the user to quickly search for courses in the var
 ![examplegif](https://github.com/kumarpit/seats-available/blob/main/gifs/gif.gif)
 
 # Todo
-- [ ] Save all searches and let the user know if any there have been any changes in seat availability since the last time checked.
+- [ ] Save all searches and let the user know if there have been any changes in seat availability since the last time checked.
 - [ ] Improve formatting of information.
