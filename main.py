@@ -58,11 +58,42 @@ def getSeats(dept, course, section):
 
 	start()
 
+def getAll():
+	get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea"
+	request_page = urlopen(get_url)
+	page_html = request_page.read()
+	request_page.close()
+	html_soup = BeautifulSoup(page_html, "html.parser")
+
+	table = html_soup.find("table", id="mainTable")
+
+	for tr in table.find_all("tr"):
+		td = tr.find_all("td")
+		row = [i.text for i in td]
+		print(row)
+
+	start()
+
+def getCurrTerm():
+	get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea"
+	request_page = urlopen(get_url)
+	page_html = request_page.read()
+	request_page.close()
+	html_soup = BeautifulSoup(page_html, "html.parser")
+
+	buttons = html_soup.find_all("button", class_="btn-primary")
+
+	for bt in buttons:
+		print(bt.text)
+
 def start():
+	getCurrTerm()
 	dept = input("Dept: ")
 	
 	if(dept == "-1"):
 		sys.exit()	
+	elif(dept == "all"):
+		getAll()
 
 	course = input("Course: ")
 	section = input("Section: ")
