@@ -52,7 +52,7 @@ def getSeats(dept, course, section):
 	strong_el = html_soup.find_all("strong")
 	for el in strong_el:
 		print(el.text)
-		
+
 	pc.copy(get_url)
 	print("Link copied to clipboard")
 
