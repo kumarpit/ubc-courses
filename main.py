@@ -4,6 +4,7 @@
 
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import sys
 
 def getCourses(dept):
 	get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-department&dept="+dept
@@ -19,6 +20,8 @@ def getCourses(dept):
 		td = tr.find_all("td")
 		row = [i.text for i in td]
 		print(row)
+
+	start()
 
 def getSections(dept, course):
 	get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept="+dept+"&course="+course
@@ -38,6 +41,8 @@ def getSections(dept, course):
 		row = [i.text for i in td]
 		print(row)
 
+	start()
+
 def getSeats(dept, course, section):
 	get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept="+dept+"&course="+course+"&section="+section
 	request_page = urlopen(get_url)
@@ -52,10 +57,15 @@ def getSeats(dept, course, section):
 	for el in strong_el:
 		print(el.text)
 
+	start()
+
 def start():
 	dept = input("Dept: ")
 	course = input("Course: ")
 	section = input("Section: ")
+
+	if(dept == "-1"):
+		sys.exit()	
 
 	if(len(course) == 0):
 		getCourses(dept)
