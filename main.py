@@ -61,11 +61,12 @@ def getSeats(dept, course, section):
 
 def start():
 	dept = input("Dept: ")
-	course = input("Course: ")
-	section = input("Section: ")
-
+	
 	if(dept == "-1"):
 		sys.exit()	
+
+	course = input("Course: ")
+	section = input("Section: ")
 
 	if(len(course) == 0):
 		getCourses(dept)
