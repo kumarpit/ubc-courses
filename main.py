@@ -72,6 +72,7 @@ def getAll():
 		row = [i.text for i in td]
 		print(row)
 
+	print("* indicates no courses offered for current term")
 	start()
 
 def getCurrTerm():
