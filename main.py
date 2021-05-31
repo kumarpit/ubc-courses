@@ -21,6 +21,8 @@ table = html_soup.find("table", class_="section-summary")
 for to_delete in table.find_all("td", class_="section-comments"):
 	to_delete.decompose()
 
-for td in table.find_all("tr"):
-	print(td.text)
+for tr in table.find_all("tr"):
+	td = tr.find_all("td")
+	row = [i.text for i in td]
+	print(row)
 
