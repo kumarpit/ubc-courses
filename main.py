@@ -5,10 +5,8 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
-dept = input("Dept: ")
-course = input("Course: ")
-
-def getCourses():
+def getCourses(dept):
+	get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-department&dept="+dept
 	request_page = urlopen(get_url)
 	page_html = request_page.read()
 	request_page.close()
@@ -22,7 +20,8 @@ def getCourses():
 		row = [i.text for i in td]
 		print(row)
 
-def getSections():
+def getSections(dept, course):
+	get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept="+dept+"&course="+course
 	request_page = urlopen(get_url)
 	page_html = request_page.read()
 	request_page.close()
@@ -39,9 +38,29 @@ def getSections():
 		row = [i.text for i in td]
 		print(row)
 
-if(len(course) == 0):
-	get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-department&dept="+dept
-	getCourses()
-else:
-	get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept="+dept+"&course="+course
-	getSections()
+def getSeats(dept, course, section):
+	get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept="+dept+"&course="+course+"&section="+section
+	request_page = urlopen(get_url)
+	page_html = request_page.read()
+	request_page.close()
+
+	html_soup = BeautifulSoup(page_html, "html.parser")
+
+	tables = html_soup.find_all("table", class_="table")
+
+	for table in tables:
+		print(table.text)
+
+def start():
+	dept = input("Dept: ")
+	course = input("Course: ")
+	section = input("Section: ")
+
+	if(len(course) == 0):
+		getCourses(dept)
+	elif(len(section) == 0):
+		getSections(dept, course)
+	else:
+		getSeats(dept, course, section)
+
+start()
