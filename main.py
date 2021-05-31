@@ -1,3 +1,7 @@
+
+# SEARCH FOR COURSE -> RETURNS ALL SECTIONS
+# SEARCH FOR SECTIONS -> RETURNS AVAILABLE SEATS, TIMING, LINK TO REGISTER
+
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
