@@ -57,12 +57,7 @@ def getAll():
 	page_html = scrape(get_url)
 	html_soup = BeautifulSoup(page_html, "html.parser")
 	table = html_soup.find("table", id="mainTable")
-
-	for tr in table.find_all("tr"):
-		td = tr.find_all("td")
-		row = [i.text for i in td]
-		print(row)
-
+	printTable(table.find_all("tr"))
 	print("* indicates no courses offered for current term")
 	start()
 
