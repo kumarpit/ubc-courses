@@ -5,6 +5,7 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import sys
+import pyperclip as pc
 
 def getCourses(dept):
 	get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-department&dept="+dept
@@ -51,6 +52,9 @@ def getSeats(dept, course, section):
 	strong_el = html_soup.find_all("strong")
 	for el in strong_el:
 		print(el.text)
+		
+	pc.copy(get_url)
+	print("Link copied to clipboard")
 
 	start()
 
