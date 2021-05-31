@@ -46,10 +46,11 @@ def getSeats(dept, course, section):
 
 	html_soup = BeautifulSoup(page_html, "html.parser")
 
-	tables = html_soup.find_all("table", class_="table")
+	# tables = html_soup.find_all("table", class_="table")
 
-	for table in tables:
-		print(table.text)
+	strong_el = html_soup.find_all("strong")
+	for el in strong_el:
+		print(el.text)
 
 def start():
 	dept = input("Dept: ")
