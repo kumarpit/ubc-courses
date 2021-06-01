@@ -24,7 +24,10 @@ def getCourses(dept):
 	page_html = scrape(get_url)
 	html_soup = BeautifulSoup(page_html, "html.parser")
 	table = html_soup.find("table", id="mainTable")
-	printTable(table.find_all("tr"))
+	try:
+		printTable(table.find_all("tr"))
+	except:
+		print("INVALID")
 	start()
 
 def getSections(dept, course):
@@ -32,11 +35,12 @@ def getSections(dept, course):
 	page_html = scrape(get_url)
 	html_soup = BeautifulSoup(page_html, "html.parser")
 	table = html_soup.find("table", class_="section-summary")
-
-	for to_delete in table.find_all("td", class_="section-comments"):
-		to_delete.decompose()
-
-	printTable(table.find_all("tr"))
+	try:
+		for to_delete in table.find_all("td", class_="section-comments"):
+			to_delete.decompose()
+		printTable(table.find_all("tr"))
+	except:
+		print("INVALID")
 	start()
 
 def getSeats(dept, course, section):
@@ -44,12 +48,13 @@ def getSeats(dept, course, section):
 	page_html = scrape(get_url)
 	html_soup = BeautifulSoup(page_html, "html.parser")
 	strong_el = html_soup.find_all("strong")
-
-	for el in strong_el:
-		print(el.text)
-
-	pc.copy(get_url)
-	print("Link copied to clipboard")
+	if(strong_el == []):
+		print("INVALID")
+	else:	
+		for el in strong_el:
+			print(el.text)
+		pc.copy(get_url)
+		print("Link copied to clipboard")
 	start()
 
 def getAll():
@@ -87,6 +92,6 @@ def start():
 		getSections(dept, course)
 	else:
 		getSeats(dept, course, section)
-		
+			
 getCurrTerm()
 start()
