@@ -50,9 +50,9 @@ def getSeats(dept, course, section):
 	seat_sum = html_soup.find("table", class_="'table")
 	table_el = html_soup.find_all("td")
 	td_link = []
-	printTable(seat_sum.find_all("tr"))
 
 	try:
+		printTable(seat_sum.find_all("tr"))
 		for td in table_el:
 			if td.find_all("a") != []:
 				td_link.append(td)
@@ -61,7 +61,7 @@ def getSeats(dept, course, section):
 		for link in td_link:
 				print(f"Instructor: {link.text}") # open ratemyprof option
 		
-		print("Link copied to clipboard")
+		print("Registration link copied to clipboard")
 	except:
 		print("INVALID")
 	start()
