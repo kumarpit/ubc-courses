@@ -47,24 +47,23 @@ def getSeats(dept, course, section):
 	get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept="+dept+"&course="+course+"&section="+section
 	page_html = scrape(get_url)
 	html_soup = BeautifulSoup(page_html, "html.parser")
-	strong_el = html_soup.find_all("strong")
+	seat_sum = html_soup.find("table", class_="'table")
 	table_el = html_soup.find_all("td")
 	td_link = []
+	printTable(seat_sum.find_all("tr"))
 
-	for td in table_el:
-		if td.find_all("a") != []:
-			td_link.append(td)
-
-	if(strong_el == []):
-		print("INVALID")
-	else:	
-		for el in strong_el:
-			print(el.text)
-
+	try:
+		for td in table_el:
+			if td.find_all("a") != []:
+				td_link.append(td)
 		pc.copy(get_url)
+		
 		for link in td_link:
-			print(f"Instructor: {link.text}") # open ratemyprof option
+				print(f"Instructor: {link.text}") # open ratemyprof option
+		
 		print("Link copied to clipboard")
+	except:
+		print("INVALID")
 	start()
 
 def getAll():
