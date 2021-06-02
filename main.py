@@ -85,15 +85,15 @@ def getCurrTerm():
 		print(bt.text)
 
 def start():
-	dept = input("Dept: ")
+	dept = input("Dept: ").replace(" ", "")
 	
 	if(dept == "-1"):
 		sys.exit()	
 	elif(dept == "all"):
 		getAll()
 
-	course = input("Course: ")
-	section = input("Section: ")
+	course = input("Course: ").replace(" ", "")
+	section = input("Section: ").replace(" ", "")
 
 	if(len(course) == 0):
 		getCourses(dept)
