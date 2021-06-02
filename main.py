@@ -48,12 +48,22 @@ def getSeats(dept, course, section):
 	page_html = scrape(get_url)
 	html_soup = BeautifulSoup(page_html, "html.parser")
 	strong_el = html_soup.find_all("strong")
+	table_el = html_soup.find_all("td")
+	td_link = []
+
+	for td in table_el:
+		if td.find_all("a") != []:
+			td_link.append(td)
+
 	if(strong_el == []):
 		print("INVALID")
 	else:	
 		for el in strong_el:
 			print(el.text)
+
 		pc.copy(get_url)
+		for link in td_link:
+			print(f"Instructor: {link.text}") # open ratemyprof option
 		print("Link copied to clipboard")
 	start()
 
