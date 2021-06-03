@@ -1,8 +1,14 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 import sys
 import pyperclip as pc
+
+options = Options()
+options.add_argument("--log-level=3")
+global DRIVER_PATH
+DRIVER_PATH = "C:/Users/Lenovo/Downloads/chromedriver_win32/chromedriver"
 
 def scrape(url):
 	request_page = urlopen(url)
@@ -47,7 +53,7 @@ def getProf(prof):
 	if(search_prof == ""):
 		return
 	else:
-		driver = webdriver.Chrome("C:/Users/Lenovo/Downloads/chromedriver_win32/chromedriver")
+		driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
 		driver.get(prof_url)
 
 def getSeats(dept, course, section):
