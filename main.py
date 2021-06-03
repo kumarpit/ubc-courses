@@ -55,6 +55,7 @@ def getProf(prof):
 	else:
 		driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
 		driver.get(prof_url)
+		driver.find_element_by_css_selector('[alt="Banner Close Icon"]').click()
 
 def getSeats(dept, course, section):
 	get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept="+dept+"&course="+course+"&section="+section
@@ -98,16 +99,15 @@ def getCurrTerm():
 	for bt in buttons:
 		print(bt.text)
 
-
 def start():
 	dept = input("Dept: ").replace(" ", "")
-	
+
 	if(dept == "-1"):
 		sys.exit()	
 	elif(dept == "all"):
 		getAll()
 		return
-
+	
 	course = input("Course: ").replace(" ", "")
 
 	if(len(course) == 0):
