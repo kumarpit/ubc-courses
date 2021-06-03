@@ -71,12 +71,13 @@ def getSeats(dept, course, section):
 			if td.find_all("a") != []:
 				td_link.append(td)
 		pc.copy(get_url)
+		print("Registration link copied to clipboard")
 		
 		for link in td_link:
-				print(f"Instructor: {link.text}")
-		
-		print("Registration link copied to clipboard")
-		getProf(td_link[0].text)
+				if "," in link.text:
+					print(f"Instructor: {link.text}")
+					getProf(link.text)
+					break
 	except:
 		print("INVALID")
 	start()
