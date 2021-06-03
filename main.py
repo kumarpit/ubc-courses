@@ -1,9 +1,6 @@
-# SEARCH FOR SUBJECT -> RETURN ALL COURSES
-# SEARCH FOR COURSE -> RETURNS ALL SECTIONS
-# SEARCH FOR SECTIONS -> RETURNS AVAILABLE SEATS, TIMING, LINK TO REGISTER
-
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+from selenium import webdriver
 import sys
 import pyperclip as pc
 
@@ -43,6 +40,16 @@ def getSections(dept, course):
 		print("INVALID")
 	start()
 
+def getProf(prof):
+	name = prof.split(" ")
+	prof_url = "https://www.ratemyprofessors.com/search/teachers?query=" + name[1].replace(",", "") + "+" + name[0].replace(",", "")
+	search_prof = input("View Prof? ")
+	if(search_prof == ""):
+		return
+	else:
+		driver = webdriver.Chrome("C:/Users/Lenovo/Downloads/chromedriver_win32/chromedriver")
+		driver.get(prof_url)
+
 def getSeats(dept, course, section):
 	get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept="+dept+"&course="+course+"&section="+section
 	page_html = scrape(get_url)
@@ -59,9 +66,10 @@ def getSeats(dept, course, section):
 		pc.copy(get_url)
 		
 		for link in td_link:
-				print(f"Instructor: {link.text}") # open ratemyprof option
+				print(f"Instructor: {link.text}")
 		
 		print("Registration link copied to clipboard")
+		getProf(td_link[0].text)
 	except:
 		print("INVALID")
 	start()
@@ -84,6 +92,7 @@ def getCurrTerm():
 	for bt in buttons:
 		print(bt.text)
 
+
 def start():
 	dept = input("Dept: ").replace(" ", "")
 	
@@ -91,13 +100,17 @@ def start():
 		sys.exit()	
 	elif(dept == "all"):
 		getAll()
+		return
 
 	course = input("Course: ").replace(" ", "")
-	section = input("Section: ").replace(" ", "")
 
 	if(len(course) == 0):
 		getCourses(dept)
-	elif(len(section) == 0):
+		return
+	else:
+		section = input("Section: ").replace(" ", "")
+	
+	if(len(section) == 0):
 		getSections(dept, course)
 	else:
 		getSeats(dept, course, section)
