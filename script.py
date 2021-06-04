@@ -44,3 +44,7 @@ def findLink(to_find):
 findLink("CPSC")
 findLink("CPSC 110")
 findLink("CPSC 110 101")
+
+driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
+
+
