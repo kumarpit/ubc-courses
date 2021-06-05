@@ -2,6 +2,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from script import *
 import sys
 import pyperclip as pc
 
@@ -55,7 +56,6 @@ def getProf(prof):
 	else:
 		driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
 		driver.get(prof_url)
-		driver.find_element_by_css_selector('[alt="Banner Close Icon"]').click()
 
 def getSeats(dept, course, section):
 	get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept="+dept+"&course="+course+"&section="+section
@@ -107,6 +107,9 @@ def start():
 		sys.exit()	
 	elif(dept == "all"):
 		getAll()
+		return
+	elif(dept == "register"):
+		add_course_to_worklist()
 		return
 	
 	course = input("Course: ").replace(" ", "")

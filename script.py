@@ -15,26 +15,7 @@ options.add_argument("--window-size=1500,1200")
 USER = os.environ['USER']
 PASS = os.environ['PASS']
 
-register_courses = input("COURSE: ")
-register_list = register_courses.split(", ")
-target_worklist = input("WORKLIST: ")
-
-driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
-driver.get("https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-all-departments")
-driver.find_element_by_xpath("//input[@type='IMAGE']").click()
-driver.find_element_by_id("username").send_keys(USER)
-driver.find_element_by_id("password").send_keys(PASS)
-driver.find_element_by_xpath("//input[@type='submit']").click()
-
-timeout = 10
-
-try:
-	element_present = EC.presence_of_element_located((By.ID, 'mainTable'))
-	WebDriverWait(driver, timeout).until(element_present)
-except TimeoutException:
-	print("TIMEOUT")
-
-def findLink(to_find):
+def findLink(to_find, driver):
 	courses = driver.find_elements_by_tag_name("a")
 	for course in courses:
 		print(course.text)
@@ -45,42 +26,63 @@ def findLink(to_find):
 	print("ERR: COURSE NOT FOUND")
 	driver.quit()
 
-for register in register_list:
-	dept = register.split(" ")[0].upper()
-	course = register.split(" ")[1]
-	section = register.split(" ")[2]
+def add_course_to_worklist():
+	register_courses = input("Course(s): ")
+	register_list = register_courses.split(", ")
+	target_worklist = input("Worklist: ")
 
-	findLink(f"{dept}")
-	findLink(f"{dept} {course}")
-	findLink(f"{dept} {course} {section}")
+	driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
+	driver.get("https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-all-departments")
+	driver.find_element_by_xpath("//input[@type='IMAGE']").click()
+	driver.find_element_by_id("username").send_keys(USER)
+	driver.find_element_by_id("password").send_keys(PASS)
+	driver.find_element_by_xpath("//input[@type='submit']").click()
 
-	#search for worklist
-	get_active_el = driver.find_elements_by_xpath("//li[@class='active']")
-	active_el = []
-	for el in get_active_el:
-		active_el.append(el.text)
+	timeout = 10
 
-	get_inactive_el = driver.find_elements_by_xpath("//li[not(@class='active')]")
-	inactive_el = []
-	for el in get_inactive_el:
-		inactive_el.append(el.text)
+	try:
+		element_present = EC.presence_of_element_located((By.ID, 'mainTable'))
+		WebDriverWait(driver, timeout).until(element_present)
+	except TimeoutException:
+		print("TIMEOUT")
 
-	if(target_worklist in active_el):
-		driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
-	elif(target_worklist in inactive_el):
-		driver.find_element(By.PARTIAL_LINK_TEXT, f'{target_worklist}').click()
-		driver.find_element(By.PARTIAL_LINK_TEXT, f'{dept} {course} {section}').click()
-		driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
-	else:
-		# create new worklist
-		driver.find_element(By.PARTIAL_LINK_TEXT, 'New Worklist').click()
-		driver.find_element_by_id("attrWorklistName").send_keys(target_worklist)
-		driver.find_element_by_xpath("//input[@value='Create New Worklist']").click()
-		driver.find_element(By.PARTIAL_LINK_TEXT, f'{dept} {course} {section}').click()
-		driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
+	for register in register_list:
+		dept = register.split(" ")[0].upper()
+		course = register.split(" ")[1]
+		section = register.split(" ")[2]
 
-	driver.find_element(By.PARTIAL_LINK_TEXT, 'Browse Courses').click()
+		findLink(f"{dept}", driver)
+		findLink(f"{dept} {course}", driver)
+		findLink(f"{dept} {course} {section}", driver)
 
-driver.quit()
+		#search for worklist
+		get_active_el = driver.find_elements_by_xpath("//li[@class='active']")
+		active_el = []
+		for el in get_active_el:
+			active_el.append(el.text)
 
+		get_inactive_el = driver.find_elements_by_xpath("//li[not(@class='active')]")
+		inactive_el = []
+		for el in get_inactive_el:
+			inactive_el.append(el.text)
+
+		if(target_worklist in active_el):
+			driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
+		elif(target_worklist in inactive_el):
+			driver.find_element(By.PARTIAL_LINK_TEXT, f'{target_worklist}').click()
+			driver.find_element(By.PARTIAL_LINK_TEXT, f'{dept} {course} {section}').click()
+			driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
+		else:
+			# create new worklist
+			driver.find_element(By.PARTIAL_LINK_TEXT, 'New Worklist').click()
+			driver.find_element_by_id("attrWorklistName").send_keys(target_worklist)
+			driver.find_element_by_xpath("//input[@value='Create New Worklist']").click()
+			driver.find_element(By.PARTIAL_LINK_TEXT, f'{dept} {course} {section}').click()
+			driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
+
+		driver.find_element(By.PARTIAL_LINK_TEXT, 'Browse Courses').click()
+
+	driver.quit()
+
+# add_course_to_worklist()
 
