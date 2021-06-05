@@ -19,7 +19,6 @@ register_courses = input("COURSE: ")
 register_list = register_courses.split(", ")
 target_worklist = input("WORKLIST: ")
 
-# 1 time only
 driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
 driver.get("https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-all-departments")
 driver.find_element_by_xpath("//input[@type='IMAGE']").click()
@@ -61,10 +60,19 @@ for register in register_list:
 	for el in get_active_el:
 		active_el.append(el.text)
 
+	get_inactive_el = driver.find_elements_by_xpath("//li[not(@class='active')]")
+	inactive_el = []
+	for el in get_inactive_el:
+		inactive_el.append(el.text)
+
 	if(target_worklist in active_el):
 		driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
+	elif(target_worklist in inactive_el):
+		driver.find_element(By.PARTIAL_LINK_TEXT, f'{target_worklist}').click()
+		driver.find_element(By.PARTIAL_LINK_TEXT, f'{dept} {course} {section}').click()
+		driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
 	else:
-		# create new worklist if not currently in desired worklist
+		# create new worklist
 		driver.find_element(By.PARTIAL_LINK_TEXT, 'New Worklist').click()
 		driver.find_element_by_id("attrWorklistName").send_keys(target_worklist)
 		driver.find_element_by_xpath("//input[@value='Create New Worklist']").click()
@@ -72,8 +80,6 @@ for register in register_list:
 		driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
 
 	driver.find_element(By.PARTIAL_LINK_TEXT, 'Browse Courses').click()
-
-# add condition to check inactive worklists
 
 driver.quit()
 
