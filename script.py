@@ -16,7 +16,7 @@ USER = os.environ['USER']
 PASS = os.environ['PASS']
 
 register = input("COURSE: ")
-# worklist = input("WORKLIST: ")
+target_worklist = input("WORKLIST: ")
 dept = register.split(" ")[0].upper()
 course = register.split(" ")[1]
 section = register.split(" ")[2]
@@ -42,23 +42,33 @@ def findLink(to_find):
 		print(course.text)
 		if(course.text == to_find):
 			course.click()
-			break
+			return
+
+	print("ERR: COURSE NOT FOUND")
+	driver.quit()
 
 findLink(f"{dept}")
 findLink(f"{dept} {course}")
 findLink(f"{dept} {course} {section}")
 
-# create new worklist if not currently in desired worklist
-driver.find_element(By.PARTIAL_LINK_TEXT, 'New Worklist').click()
-driver.find_element_by_id("attrWorklistName").send_keys("NEW")
-driver.find_element_by_xpath("//input[@value='Create New Worklist']").click()
-driver.find_element(By.PARTIAL_LINK_TEXT, f'{dept} {course} {section}').click()
-
 #search for worklist
-#!!!
+get_active_el = driver.find_elements_by_xpath("//li[@class='active']")
+active_el = []
+for el in get_active_el:
+	active_el.append(el.text)
+
+if(target_worklist in active_el):
+	driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
+else:
+	# create new worklist if not currently in desired worklist
+	driver.find_element(By.PARTIAL_LINK_TEXT, 'New Worklist').click()
+	driver.find_element_by_id("attrWorklistName").send_keys(target_worklist)
+	driver.find_element_by_xpath("//input[@value='Create New Worklist']").click()
+	driver.find_element(By.PARTIAL_LINK_TEXT, f'{dept} {course} {section}').click()
+
+# add condition to check other worklists
 
 
-driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
 
 # driver.quit()
 
