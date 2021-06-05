@@ -15,12 +15,11 @@ options.add_argument("--window-size=1500,1200")
 USER = os.environ['USER']
 PASS = os.environ['PASS']
 
-register = input("COURSE: ")
+register_courses = input("COURSE: ")
+register_list = register_courses.split(", ")
 target_worklist = input("WORKLIST: ")
-dept = register.split(" ")[0].upper()
-course = register.split(" ")[1]
-section = register.split(" ")[2]
 
+# 1 time only
 driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
 driver.get("https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-all-departments")
 driver.find_element_by_xpath("//input[@type='IMAGE']").click()
@@ -47,29 +46,35 @@ def findLink(to_find):
 	print("ERR: COURSE NOT FOUND")
 	driver.quit()
 
-findLink(f"{dept}")
-findLink(f"{dept} {course}")
-findLink(f"{dept} {course} {section}")
+for register in register_list:
+	dept = register.split(" ")[0].upper()
+	course = register.split(" ")[1]
+	section = register.split(" ")[2]
 
-#search for worklist
-get_active_el = driver.find_elements_by_xpath("//li[@class='active']")
-active_el = []
-for el in get_active_el:
-	active_el.append(el.text)
+	findLink(f"{dept}")
+	findLink(f"{dept} {course}")
+	findLink(f"{dept} {course} {section}")
 
-if(target_worklist in active_el):
-	driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
-else:
-	# create new worklist if not currently in desired worklist
-	driver.find_element(By.PARTIAL_LINK_TEXT, 'New Worklist').click()
-	driver.find_element_by_id("attrWorklistName").send_keys(target_worklist)
-	driver.find_element_by_xpath("//input[@value='Create New Worklist']").click()
-	driver.find_element(By.PARTIAL_LINK_TEXT, f'{dept} {course} {section}').click()
+	#search for worklist
+	get_active_el = driver.find_elements_by_xpath("//li[@class='active']")
+	active_el = []
+	for el in get_active_el:
+		active_el.append(el.text)
 
-# add condition to check other worklists
+	if(target_worklist in active_el):
+		driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
+	else:
+		# create new worklist if not currently in desired worklist
+		driver.find_element(By.PARTIAL_LINK_TEXT, 'New Worklist').click()
+		driver.find_element_by_id("attrWorklistName").send_keys(target_worklist)
+		driver.find_element_by_xpath("//input[@value='Create New Worklist']").click()
+		driver.find_element(By.PARTIAL_LINK_TEXT, f'{dept} {course} {section}').click()
+		driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
 
+	driver.find_element(By.PARTIAL_LINK_TEXT, 'Browse Courses').click()
 
+# add condition to check inactive worklists
 
-# driver.quit()
+driver.quit()
 
 
