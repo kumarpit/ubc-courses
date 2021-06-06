@@ -108,19 +108,15 @@ def start():
 	if(dept == "-1"):
 		sys.exit()	
 	elif(dept == "all"):
-		getAll()
-		return
+		return getAll()
 	elif(dept == "register"):
-		driver_active = True
 		add_course_to_worklist()
-		start()
-		return
+		return start()
 	
 	course = input("Course: ").replace(" ", "")
 
 	if(len(course) == 0):
-		getCourses(dept)
-		return
+		return getCourses(dept)
 	else:
 		section = input("Section: ").replace(" ", "")
 	
