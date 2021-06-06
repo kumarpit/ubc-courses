@@ -19,8 +19,8 @@ options.add_argument("--log-level=3")
 USER = os.environ['USER']
 PASS = os.environ['PASS']
 
-def findLink(to_find):
-	courses = driver.find_elements_by_tag_name("a")
+def findLink(to_find, selector):
+	courses = driver.find_elements_by_css_selector(selector)
 	for course in courses:
 		if(course.text == to_find):
 			print(Back.GREEN + course.text)
@@ -62,9 +62,9 @@ def add_course_to_worklist():
 
 		print(Fore.YELLOW + "FINDING COURSE...")
 
-		findLink(f"{dept}")
-		findLink(f"{dept} {course}")
-		findLink(f"{dept} {course} {section}")
+		findLink(f"{dept}", "table[id='mainTable'] a")
+		findLink(f"{dept} {course}", "table[id='mainTable'] a")
+		findLink(f"{dept} {course} {section}", "table[class='table table-striped section-summary'] a")
 
 		print(Fore.YELLOW + "SAVING TO WORKLIST...")
 
