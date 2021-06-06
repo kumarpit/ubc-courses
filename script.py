@@ -9,13 +9,14 @@ import os
 DRIVER_PATH = "C:/Users/Lenovo/Downloads/chromedriver_win32/chromedriver"
 
 options = Options()
-options.headless = False
+options.headless = True
 options.add_argument("--window-size=1500,1200")
+options.add_argument("--log-level=3")
 
 USER = os.environ['USER']
 PASS = os.environ['PASS']
 
-def findLink(to_find, driver):
+def findLink(to_find):
 	courses = driver.find_elements_by_tag_name("a")
 	for course in courses:
 		print(course.text)
@@ -31,12 +32,15 @@ def add_course_to_worklist():
 	register_list = register_courses.split(", ")
 	target_worklist = input("Worklist: ")
 
+	global driver
 	driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
 	driver.get("https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-all-departments")
 	driver.find_element_by_xpath("//input[@type='IMAGE']").click()
 	driver.find_element_by_id("username").send_keys(USER)
 	driver.find_element_by_id("password").send_keys(PASS)
 	driver.find_element_by_xpath("//input[@type='submit']").click()
+
+	print("LOGGING IN...")
 
 	timeout = 10
 
@@ -51,9 +55,13 @@ def add_course_to_worklist():
 		course = register.split(" ")[1]
 		section = register.split(" ")[2]
 
-		findLink(f"{dept}", driver)
-		findLink(f"{dept} {course}", driver)
-		findLink(f"{dept} {course} {section}", driver)
+		print("FINDING COURSE...")
+
+		findLink(f"{dept}")
+		findLink(f"{dept} {course}")
+		findLink(f"{dept} {course} {section}")
+
+		print("SAVING TO WORKLIST...")
 
 		#search for worklist
 		get_active_el = driver.find_elements_by_xpath("//li[@class='active']")
@@ -68,10 +76,12 @@ def add_course_to_worklist():
 
 		if(target_worklist in active_el):
 			driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
+			print("SAVED TO WORKLIST")
 		elif(target_worklist in inactive_el):
 			driver.find_element(By.PARTIAL_LINK_TEXT, f'{target_worklist}').click()
 			driver.find_element(By.PARTIAL_LINK_TEXT, f'{dept} {course} {section}').click()
 			driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
+			print("SAVED TO WORKLIST")
 		else:
 			# create new worklist
 			driver.find_element(By.PARTIAL_LINK_TEXT, 'New Worklist').click()
@@ -79,10 +89,12 @@ def add_course_to_worklist():
 			driver.find_element_by_xpath("//input[@value='Create New Worklist']").click()
 			driver.find_element(By.PARTIAL_LINK_TEXT, f'{dept} {course} {section}').click()
 			driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
+			print("WORKLIST CREATED")
+			print("SAVED TO WORKLIST")
 
 		driver.find_element(By.PARTIAL_LINK_TEXT, 'Browse Courses').click()
 
-	driver.quit()
+	driver.close()
 
-# add_course_to_worklist()
+
 
