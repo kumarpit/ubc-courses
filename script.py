@@ -5,6 +5,9 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 import os
+import colorama
+from colorama import Fore, Back
+colorama.init(autoreset=True)
 
 DRIVER_PATH = "C:/Users/Lenovo/Downloads/chromedriver_win32/chromedriver"
 
@@ -19,10 +22,12 @@ PASS = os.environ['PASS']
 def findLink(to_find):
 	courses = driver.find_elements_by_tag_name("a")
 	for course in courses:
-		print(course.text)
 		if(course.text == to_find):
+			print(Back.GREEN + course.text)
 			course.click()
 			return
+		else:
+			print(course.text)
 
 	print("ERR: COURSE NOT FOUND")
 	driver.quit()
@@ -40,7 +45,7 @@ def add_course_to_worklist():
 	driver.find_element_by_id("password").send_keys(PASS)
 	driver.find_element_by_xpath("//input[@type='submit']").click()
 
-	print("LOGGING IN...")
+	print(Fore.YELLOW + "LOGGING IN...")
 
 	timeout = 10
 
@@ -48,20 +53,20 @@ def add_course_to_worklist():
 		element_present = EC.presence_of_element_located((By.ID, 'mainTable'))
 		WebDriverWait(driver, timeout).until(element_present)
 	except TimeoutException:
-		print("TIMEOUT")
+		print(Fore.RED + "TIMEOUT")
 
 	for register in register_list:
 		dept = register.split(" ")[0].upper()
 		course = register.split(" ")[1]
 		section = register.split(" ")[2]
 
-		print("FINDING COURSE...")
+		print(Fore.YELLOW + "FINDING COURSE...")
 
 		findLink(f"{dept}")
 		findLink(f"{dept} {course}")
 		findLink(f"{dept} {course} {section}")
 
-		print("SAVING TO WORKLIST...")
+		print(Fore.YELLOW + "SAVING TO WORKLIST...")
 
 		#search for worklist
 		get_active_el = driver.find_elements_by_xpath("//li[@class='active']")
@@ -76,12 +81,12 @@ def add_course_to_worklist():
 
 		if(target_worklist in active_el):
 			driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
-			print("SAVED TO WORKLIST")
+			print(Fore.GREEN + "SAVED TO WORKLIST")
 		elif(target_worklist in inactive_el):
 			driver.find_element(By.PARTIAL_LINK_TEXT, f'{target_worklist}').click()
 			driver.find_element(By.PARTIAL_LINK_TEXT, f'{dept} {course} {section}').click()
 			driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
-			print("SAVED TO WORKLIST")
+			print(Fore.GREEN + "SAVED TO WORKLIST")
 		else:
 			# create new worklist
 			driver.find_element(By.PARTIAL_LINK_TEXT, 'New Worklist').click()
@@ -89,8 +94,8 @@ def add_course_to_worklist():
 			driver.find_element_by_xpath("//input[@value='Create New Worklist']").click()
 			driver.find_element(By.PARTIAL_LINK_TEXT, f'{dept} {course} {section}').click()
 			driver.find_element(By.PARTIAL_LINK_TEXT, 'Save To Worklist').click()
-			print("WORKLIST CREATED")
-			print("SAVED TO WORKLIST")
+			print(Fore.GREEN + "WORKLIST CREATED")
+			print(Fore.GREEN + "SAVED TO WORKLIST")
 
 		driver.find_element(By.PARTIAL_LINK_TEXT, 'Browse Courses').click()
 

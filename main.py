@@ -5,6 +5,9 @@ from selenium.webdriver.chrome.options import Options
 from script import add_course_to_worklist
 import sys
 import pyperclip as pc
+import colorama
+from colorama import Fore, Back, Style
+colorama.init(autoreset=True)
 
 options = Options()
 options.add_argument("--log-level=3")
@@ -30,7 +33,7 @@ def getCourses(dept):
 	try:
 		printTable(table.find_all("tr"))
 	except:
-		print("INVALID")
+		print(Fore.RED + "INVALID")
 	start()
 
 def getSections(dept, course):
@@ -43,7 +46,7 @@ def getSections(dept, course):
 			to_delete.decompose()
 		printTable(table.find_all("tr"))
 	except:
-		print("INVALID")
+		print(Fore.RED + "INVALID")
 	start()
 
 def getProf(prof):
@@ -78,7 +81,7 @@ def getSeats(dept, course, section):
 					getProf(link.text)
 					break
 	except:
-		print("INVALID")
+		print(Fore.RED + "INVALID")
 	start()
 
 def getAll():
@@ -97,7 +100,7 @@ def getCurrTerm():
 	buttons = html_soup.find_all("button", class_="btn-primary")
 
 	for bt in buttons:
-		print(bt.text)
+		print(Fore.BLUE + Style.BRIGHT + bt.text)
 
 def start():
 	dept = input("Dept: ").replace(" ", "")
