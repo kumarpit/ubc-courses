@@ -19,6 +19,13 @@ options.add_argument("--log-level=3")
 USER = os.environ['USER']
 PASS = os.environ['PASS']
 
+courseList = []
+
+def pre_add_to_list():
+	for course in input("Add courses: ").split(", "):
+		courseList.append(course)
+
+
 def findLink(to_find, selector):
 	courses = driver.find_elements_by_css_selector(selector)
 	for course in courses:
@@ -30,11 +37,18 @@ def findLink(to_find, selector):
 			print(course.text)
 
 	print("ERR: COURSE NOT FOUND")
-	driver.quit()
+	driver.close()
 
 def add_course_to_worklist():
 	register_courses = input("Course(s): ")
 	register_list = register_courses.split(", ")
+	
+	for pre_saved in courseList:
+		register_list.append(pre_saved)
+
+	for courses in register_list:
+		print(Fore.YELLOW + courses)
+
 	target_worklist = input("Worklist: ")
 
 	global driver

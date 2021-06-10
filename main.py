@@ -2,7 +2,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from script import add_course_to_worklist
+from script import add_course_to_worklist, pre_add_to_list
 import sys
 import pyperclip as pc
 import colorama
@@ -100,7 +100,7 @@ def getCurrTerm():
 	buttons = html_soup.find_all("button", class_="btn-primary")
 
 	for bt in buttons:
-		print(Fore.BLUE + Style.BRIGHT + bt.text)
+		print(Style.BRIGHT + bt.text)
 
 def start():
 	dept = input("Dept: ").replace(" ", "")
@@ -111,6 +111,9 @@ def start():
 		return getAll()
 	elif(dept == "register"):
 		add_course_to_worklist()
+		return start()
+	elif(dept == "add"):
+		pre_add_to_list()
 		return start()
 	
 	course = input("Course: ").replace(" ", "")
