@@ -25,19 +25,19 @@ def pre_add_to_list():
 	for course in input("Add courses: ").split(", "):
 		courseList.append(course)
 
-
 def findLink(to_find, selector):
 	courses = driver.find_elements_by_css_selector(selector)
 	for course in courses:
 		if(course.text == to_find):
 			print(Back.GREEN + course.text)
 			course.click()
-			return
+			return True
 		else:
 			print(course.text)
 
-	print("ERR: COURSE NOT FOUND")
-	driver.close()
+	print(Fore.RED + f"ERR: {to_find} NOT FOUND")
+	driver.find_element(By.PARTIAL_LINK_TEXT, 'Browse Courses').click()
+	return False
 
 def add_course_to_worklist():
 	register_courses = input("Course(s): ")
@@ -76,9 +76,10 @@ def add_course_to_worklist():
 
 		print(Fore.YELLOW + "FINDING COURSE...")
 
-		findLink(f"{dept}", "table[id='mainTable'] a")
-		findLink(f"{dept} {course}", "table[id='mainTable'] a")
-		findLink(f"{dept} {course} {section}", "table[class='table table-striped section-summary'] a")
+		if(not(findLink(f"{dept}", "table[id='mainTable'] a")) or
+		 not(findLink(f"{dept} {course}", "table[id='mainTable'] a")) or 
+		 not(findLink(f"{dept} {course} {section}", "table[class='table table-striped section-summary'] a"))):
+			continue
 
 		print(Fore.YELLOW + "SAVING TO WORKLIST...")
 
