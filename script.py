@@ -39,10 +39,9 @@ def findLink(to_find, selector):
 	driver.find_element(By.PARTIAL_LINK_TEXT, 'Browse Courses').click()
 	return False
 
-#created only because I was tired of deleting all worklists I made while testing
+#created only because I was tired of deleting all worklists I made while testing  manually
 # def delete_worklists():
 # 	driver.find_element(By.PARTIAL_LINK_TEXT, 'Browse Courses').click()
-
 
 def add_course_to_worklist():
 	register_courses = input("Course(s): ")
