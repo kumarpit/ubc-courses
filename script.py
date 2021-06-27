@@ -12,7 +12,7 @@ colorama.init(autoreset=True)
 DRIVER_PATH = "C:/Users/Lenovo/Downloads/chromedriver_win32/chromedriver"
 
 options = Options()
-options.headless = True
+options.headless = False
 options.add_argument("--window-size=1500,1200")
 options.add_argument("--log-level=3")
 
