@@ -1,17 +1,10 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from script import add_course_to_worklist, pre_add_to_list
 import sys
-import pyperclip as pc
 import colorama
 from colorama import Fore, Back, Style
 colorama.init(autoreset=True)
-
-options = Options()
-options.add_argument("--log-level=3")
-DRIVER_PATH = "C:/Users/Lenovo/Downloads/chromedriver_win32/chromedriver"
 
 def scrape(url):
 	request_page = urlopen(url)
@@ -28,11 +21,13 @@ def printTable(table):
 def getCourses(dept):
 	get_url = "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-department&dept="+dept
 	page_html = scrape(get_url)
+	print(page_html)
 	html_soup = BeautifulSoup(page_html, "html.parser")
 	table = html_soup.find("table", id="mainTable")
 	try:
 		printTable(table.find_all("tr"))
 	except:
+		print(e)
 		print(Fore.RED + "INVALID")
 	start()
 
